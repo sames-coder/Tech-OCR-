@@ -1,0 +1,8 @@
+[recipient]
+labels = ["qabul qiluvchi", "oluvchi", "kimga", "получатель", "кому", "қабул қилувчи", "recipient", "beneficiary"]
+suffixes = ["kartasiga", "kartaga", "hisobiga", "картасига", "на карту", "на счёт", "на карточку"]
+
+[sender]
+labels = ["jo'natuvchi", "yuboruvchi", "kimdan", "отправитель", "от кого", "жўнатувчи", "sender"]
+suffixes = ["kartasidan", "kartadan", "hisobidan", "картасидан", "с карты", "со счёта", "с карточки"]
+

@@ -1,0 +1,1 @@
+"""Matndan nomzod qiymatlarni ajratish."""

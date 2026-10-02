@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bankxat"
+version = "0.1.0"
+description = "Bank xatlaridan qabul qiluvchi karta ma'lumotlarini xavfsiz ajratish tizimi"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "Tech OCR" }]
+dependencies = [
+  "fastapi>=0.115,<1",
+  "filetype>=1.2,<2",
+  "pdfplumber>=0.11,<1",
+  "pillow>=11,<13",
+  "pydantic>=2.10,<3",
+  "pydantic-settings>=2.7,<3",
+  "pypdfium2>=4.30,<5",
+  "python-docx>=1.1,<2",
+  "python-multipart>=0.0.20,<1",
+  "structlog>=25.1,<26",
+  "typer>=0.15,<1",
+  "uvicorn[standard]>=0.34,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "mypy>=1.14,<2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "ruff>=0.9,<1",
+]
+ocr = [
+  "paddleocr>=3.3,<4",
+  "paddlepaddle>=3,<4; platform_machine == 'x86_64'",
+]
+
+[project.scripts]
+bankxat = "bankxat.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bankxat"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["bankxat"]

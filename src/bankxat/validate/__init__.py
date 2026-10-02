@@ -1,0 +1,1 @@
+"""Nomzod qiymatlarni tekshirish funksiyalari."""

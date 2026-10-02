@@ -1,0 +1,46 @@
+[app]
+name = "Tech OCR"
+data_dir = "./data"
+output_dir = "./output"
+database_path = "./data/state.sqlite"
+
+[web]
+host = "127.0.0.1"
+port = 8765
+
+[uploads]
+directory = "./data/uploads"
+max_files_per_batch = 500
+max_file_bytes = 52428800
+
+[pipeline]
+workers = 2
+auto_accept_threshold = 0.90
+card_role_strategy = "pair_order"
+collect_auxiliary = false
+file_timeout_seconds = 180
+
+[archives]
+max_depth = 10
+max_files = 10000
+max_uncompressed_bytes = 2147483648
+seven_zip_path = "7zz"
+
+[ocr]
+dpi = 300
+languages = ["uzb", "uzb_cyrl", "rus", "eng"]
+tesseract_path = "tesseract"
+libreoffice_path = "libreoffice"
+paddle_enabled = false
+paddle_language = "uz"
+preprocess = true
+tesseract_page_modes = [6, 11]
+minimum_consensus_engines = 2
+
+[ai]
+enabled = true
+base_url = "http://127.0.0.1:11434"
+model = "qwen3:1.7b"
+timeout_seconds = 30
+minimum_confidence = 0.75
+max_text_characters = 12000

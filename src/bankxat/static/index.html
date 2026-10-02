@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bank xatlarini lokal va xavfsiz qayta ishlash paneli" />
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <title>Tech OCR</title>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="Tech OCR bosh sahifa">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span><strong>Tech OCR</strong><small>BankXat</small></span>
+      </a>
+      <nav aria-label="Asosiy navigatsiya">
+        <button class="nav-item active" data-view="overview"><span>◫</span> Umumiy holat</button>
+        <button class="nav-item" data-view="files"><span>▤</span> Hujjatlar</button>
+        <button class="nav-item" data-view="review"><span>◇</span> Tekshiruv navbati</button>
+        <button class="nav-item" data-view="about"><span>ⓘ</span> Loyiha haqida</button>
+        <button class="nav-item" data-view="system"><span>⌁</span> Tizim holati</button>
+      </nav>
+      <div class="privacy-note">
+        <span class="lock" aria-hidden="true">●</span>
+        <div><strong>Lokal rejim</strong><small>Ma’lumotlar qurilmadan chiqmaydi</small></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="menu-button" aria-label="Menyuni ochish">☰</button>
+        <div><p class="eyebrow">ISH MAYDONI</p><h1 id="page-title">Umumiy holat</h1></div>
+        <div class="topbar-actions">
+          <button id="clear-all" class="clear-all-button" type="button" aria-label="Barcha ma’lumotlarni tozalash"><span aria-hidden="true">⌫</span><strong>Barcha ma’lumotlarni tozalash</strong></button>
+          <div class="local-chip"><span></span> Lokal ulanish</div>
+        </div>
+      </header>
+
+      <section id="overview" class="view active-view">
+        <div class="scan-panel">
+          <div class="scan-heading">
+            <div><p class="eyebrow">YANGI SKANERLASH</p><h2>Hujjatlarni tanlang</h2></div>
+            <p>Fayl, arxiv yoki papka</p>
+          </div>
+          <form id="intake-form" class="intake-card compact-intake">
+            <input id="file-input" name="files" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.tif,.tiff,.zip,.rar,.7z" multiple hidden />
+            <input id="folder-input" name="folder" type="file" webkitdirectory directory multiple hidden />
+            <div id="source-dropzone" class="source-dropzone">
+              <span class="dropzone-icon" aria-hidden="true">＋</span>
+              <div><strong>Fayl, arxiv yoki papkani tanlang</strong><small>PDF, Word, rasm, ZIP, RAR, 7z · papkani shu yerga tashlang</small></div>
+              <button type="button" id="choose-files" class="source-button">Tanlash</button>
+            </div>
+            <div id="selected-files" class="selected-files" hidden></div>
+            <div class="scan-actions">
+              <button type="button" id="clear-selection" class="clear-button" hidden>Tanlovni tozalash</button>
+              <button type="submit" id="start-scan" class="scan-primary" disabled>
+                <span class="scan-button-label">Skanerlashni boshlash</span>
+                <small id="scan-button-hint">Avval hujjat tanlang</small>
+              </button>
+            </div>
+            <p id="intake-message" class="form-message" role="status"></p>
+          </form>
+        </div>
+
+        <div class="stat-grid" aria-label="Asosiy ko‘rsatkichlar">
+          <article class="stat-card"><span class="stat-icon indigo">▣</span><div><small>Topilgan kartalar</small><strong id="stat-cards">0</strong></div></article>
+          <article class="stat-card"><span class="stat-icon slate">⊜</span><div><small>Jami fayllar</small><strong id="stat-files">0</strong></div></article>
+        </div>
+
+        <div class="results-workspace">
+          <article class="panel recent-panel results-panel">
+            <div class="panel-heading results-heading">
+              <div><p class="eyebrow">NATIJALAR</p><h3>Topilgan kartalar</h3><small id="results-summary">Fayllar bo‘yicha tartiblangan</small></div>
+              <div class="result-statuses"><span id="ai-status" class="ai-status checking"><i></i><b>AI tekshirilmoqda</b></span><span class="live-status"><i></i> Lokal</span></div>
+            </div>
+            <div class="results-toolbar" aria-label="Natijalarni filtrlash">
+              <label class="search-field"><span aria-hidden="true">⌕</span><input id="result-search" type="search" placeholder="Fayl yoki karta bo‘yicha qidirish" autocomplete="off" /></label>
+              <select id="role-filter" aria-label="Karta roli">
+                <option value="ALL">Barcha rollar</option>
+                <option value="RECIPIENT">Qabul qiluvchi</option>
+                <option value="SENDER">Jo‘natuvchi</option>
+                <option value="UNKNOWN">Noma’lum</option>
+              </select>
+              <select id="source-filter" aria-label="Ma’lumot manbasi">
+                <option value="ALL">Barcha manbalar</option>
+                <option value="TEXT">Hujjat matnidan</option>
+                <option value="OCR">Rasmdan o‘qilgan</option>
+              </select>
+              <select id="sort-filter" aria-label="Saralash">
+                <option value="FILE_ASC">Fayl nomi: A–Z</option>
+                <option value="FILE_DESC">Fayl nomi: Z–A</option>
+                <option value="CARD_ASC">Karta raqami</option>
+                <option value="ROLE">Rol bo‘yicha</option>
+              </select>
+              <label class="review-filter"><input id="review-filter" type="checkbox" /> Faqat tekshiruvdagilar</label>
+            </div>
+            <div id="recent-results" class="result-list"><div class="empty"><span>▤</span><strong>Hali karta topilmadi</strong><p>Fayl yoki papka tanlab, skanerlashni boshlang.</p></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="files" class="view">
+        <article class="panel full-panel"><div class="panel-heading"><div><p class="eyebrow">INVENTAR</p><h2>So‘nggi hujjatlar</h2></div></div><div id="all-files" class="file-table"></div></article>
+      </section>
+
+      <section id="review" class="view">
+        <article class="panel full-panel"><div class="panel-heading"><div><p class="eyebrow">NAZORAT</p><h2>Tekshiruv navbati</h2></div><span class="queue-count" id="queue-count">0 ta</span></div><div id="review-list" class="review-list"><div class="empty large"><span>◇</span><strong>Tekshiruv navbati bo‘sh</strong><p>Qo‘lda tasdiqlash kerak bo‘lgan natijalar shu yerda ko‘rinadi.</p></div></div></article>
+      </section>
+
+      <section id="about" class="view">
+        <div class="about-hero">
+          <p class="eyebrow">TECH OCR · BANKXAT</p>
+          <h2>Platforma qanday ishlaydi?</h2>
+          <p>Bank xatlaridagi 16 xonali karta raqamlarini kompyuteringizning o‘zida topadi, tekshiradi va har bir hujjat bo‘yicha tartiblaydi.</p>
+          <span class="about-local"><i></i> Ma’lumotlar internetga yuborilmaydi</span>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-heading"><p class="eyebrow">ISH JARAYONI</p><h3>Beshta aniq bosqich</h3></div>
+          <div class="process-grid">
+            <article><span>1</span><div><h4>Hujjatni qabul qilish</h4><p>Fayl, arxiv yoki papka tanlanadi. Arxiv ichidagi hujjatlar avtomatik ochiladi.</p></div></article>
+            <article><span>2</span><div><h4>Matnni o‘qish</h4><p>Oddiy hujjat matni bevosita olinadi, skanerlangan sahifa yoki rasm esa maxsus o‘qish vositasi orqali taniladi.</p></div></article>
+            <article><span>3</span><div><h4>Kartalarni tekshirish</h4><p>Barcha 16 xonali raqamlar topilib, matematik nazoratdan o‘tkaziladi. Bir nechta o‘qish natijasi o‘zaro solishtiriladi.</p></div></article>
+            <article><span>4</span><div><h4>Mazmunni tushunish</h4><p>Yo‘nalish iboralari va lokal AI har bir kartani alohida tahlil qiladi. Faqat asl xatdagi dalilga tayangan xulosa qabul qilinadi.</p></div></article>
+            <article><span>5</span><div><h4>Natijani tartiblash</h4><p>Kartalar fayl va sahifa bo‘yicha ko‘rsatiladi. Noaniq holatlar alohida tekshiruvga chiqariladi.</p></div></article>
+          </div>
+        </div>
+
+        <div class="about-two-column">
+          <section class="about-section capability-section">
+            <div class="about-section-heading"><p class="eyebrow">IMKONIYATLAR</p><h3>Hozir nimalarni qila oladi?</h3></div>
+            <ul class="capability-list">
+              <li><span>✓</span> PDF, Word, matn va rasm fayllarini o‘qiydi</li>
+              <li><span>✓</span> ZIP, RAR va 7z arxivlarini ichma-ich tekshiradi</li>
+              <li><span>✓</span> Hujjatdagi barcha mos karta raqamlarini saqlaydi</li>
+              <li><span>✓</span> Kartalarni fayl, sahifa va uchrash tartibi bilan ko‘rsatadi</li>
+              <li><span>✓</span> Jo‘natuvchi va qabul qiluvchini matndagi yo‘nalish iboralari asosida ajratadi</li>
+              <li><span>✓</span> Lokal AI har bir kartaning rolini mazmun va dalil orqali tekshiradi</li>
+              <li><span>✓</span> Qidiruv, saralash va filtrlar bilan natijani tez topadi</li>
+            </ul>
+          </section>
+
+          <section class="about-section glossary-section">
+            <div class="about-section-heading"><p class="eyebrow">QISQA LUG‘AT</p><h3>Texnik atamalar nimani anglatadi?</h3></div>
+            <dl class="glossary-list">
+              <div><dt>OCR</dt><dd>Rasm yoki skanerlangan sahifadagi yozuvni kompyuter o‘qiydigan matnga aylantirish usuli.</dd></div>
+              <div><dt>Luhn tekshiruvi</dt><dd>Karta raqamida yozuv xatosi bor-yo‘qligini tekshiradigan matematik nazorat. U karta kimga tegishli ekanini aniqlamaydi.</dd></div>
+              <div><dt>Matn qatlami</dt><dd>PDF yoki Word ichidagi belgilash va nusxalash mumkin bo‘lgan tayyor matn.</dd></div>
+              <div><dt>Tekshiruv navbati</dt><dd>Platforma to‘liq ishonch bilan tasdiqlay olmagan, foydalanuvchi hujjat bilan solishtirishi kerak bo‘lgan natijalar.</dd></div>
+              <div><dt>AI yordamchi</dt><dd>Kompyuterning o‘zida ishlaydigan qo‘shimcha tahlilchi. U OCR topgan kartalar orasidan xat mazmuniga ko‘ra jo‘natuvchi va qabul qiluvchini ajratadi. U ishlamasa asosiy jarayon davom etadi.</dd></div>
+            </dl>
+          </section>
+        </div>
+
+        <div class="about-note">
+          <strong>Muhim:</strong> AI yordamchi asosiy OCR va matematik tekshiruvni almashtirmaydi. U yangi karta yaratolmaydi va qarori faqat asl xatdan dalil topilganda qabul qilinadi. Matn qoidasi va AI xulosasi mos kelmasa yoki faqat karta tartibidan taxmin qilish mumkin bo‘lsa, natija avtomatik tekshiruvga chiqariladi.
+        </div>
+      </section>
+
+      <section id="system" class="view">
+        <article class="panel full-panel"><div class="panel-heading"><div><p class="eyebrow">DIAGNOSTIKA</p><h2>Lokal vositalar</h2></div><button id="refresh-tools" class="secondary-button">Qayta tekshirish</button></div><div id="tool-list" class="tool-list"></div></article>
+      </section>
+    </main>
+
+    <dialog id="source-dialog" class="source-dialog" aria-labelledby="source-dialog-title">
+      <div class="source-dialog-header">
+        <div><p class="eyebrow">HUJJAT MANBASI</p><h2 id="source-dialog-title">Nimani tanlamoqchisiz?</h2></div>
+        <button id="close-source-dialog" class="icon-button" type="button" aria-label="Yopish">×</button>
+      </div>
+      <div class="source-choice-grid">
+        <button id="select-files" class="source-choice" type="button"><span>▤</span><div><strong>Fayl yoki arxiv</strong><small>PDF, Word, rasm, ZIP, RAR, 7z</small></div></button>
+        <button id="select-folder" class="source-choice" type="button"><span>▰</span><div><strong>Papka</strong><small>Ichidagi barcha hujjatlar bilan</small></div></button>
+      </div>
+      <p class="source-dialog-note">Bir nechta faylni ham bir vaqtda tanlashingiz mumkin.</p>
+    </dialog>
+
+    <dialog id="clear-dialog" class="confirm-dialog" aria-labelledby="clear-dialog-title">
+      <form method="dialog">
+        <span class="dialog-icon" aria-hidden="true">⌫</span>
+        <h2 id="clear-dialog-title">Barcha ma’lumotlar tozalansinmi?</h2>
+        <p>Topilgan kartalar, tekshiruv navbati, skanerlash tarixi va platformaga yuklangan nusxalar o‘chiriladi.</p>
+        <div class="dialog-note"><strong>Asl fayllar xavfsiz.</strong> Kompyuteringizdagi dastlabki hujjatlar o‘chirilmaydi.</div>
+        <div class="dialog-actions">
+          <button id="cancel-clear" value="cancel" class="dialog-cancel">Bekor qilish</button>
+          <button id="confirm-clear" value="default" type="button" class="dialog-confirm">Ha, hammasini tozalash</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="evidence-dialog" class="evidence-dialog" aria-labelledby="evidence-title">
+      <div class="evidence-dialog-header">
+        <div><p class="eyebrow">AUDIT DALILI</p><h2 id="evidence-title">Karta tafsiloti</h2></div>
+        <button id="close-evidence" class="icon-button" type="button" aria-label="Yopish">×</button>
+      </div>
+      <div id="evidence-content" class="evidence-content"></div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>
