@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import tomllib
 from pathlib import Path
 from typing import Any, Literal
@@ -49,7 +50,7 @@ class ArchiveConfig(BaseModel):
     max_depth: int = Field(default=10, ge=1, le=50)
     max_files: int = Field(default=10_000, ge=1)
     max_uncompressed_bytes: int = Field(default=2_147_483_648, ge=1)
-    seven_zip_path: str = "7zz"
+    seven_zip_path: str = "7z" if os.name == "nt" else "7zz"
 
 
 class OcrConfig(BaseModel):
