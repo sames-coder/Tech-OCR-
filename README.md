@@ -119,6 +119,25 @@ bankxat selftest
 `scan` hozircha xavfsiz inventarizatsiya bosqichini bajaradi. OCR va to'liq pipeline
 keyingi qatlamlarda shu holat bazasi ustiga ulanadi.
 
+## Windows installer
+
+Repository GitHub'ga joylangandan keyin `Actions → Windows installer → Run workflow`
+orqali Windows build'ni qo'lda ishga tushirish mumkin. Build tugagach, workflow
+ichidagi `Artifacts` bo'limidan `TechOCR-Windows-Setup` arxivi yuklab olinadi.
+
+Doimiy Release va yuklab olish havolasi yaratish uchun versiya tagini yuboring:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Workflow PyInstaller orqali lokal dasturni, Tesseract tillarini va 7-Zip'ni yig'adi,
+so'ng Inno Setup yordamida `TechOCR-Setup.exe` yaratadi. Installer foydalanuvchiga
+Ollama va standart AI modelini internet orqali tayyorlash imkonini ham beradi.
+Windows distributivi foydalanuvchi ma'lumotlarini `%LOCALAPPDATA%\TechOCR` ichida
+saqlaydi; ular o'rnatilgan dastur katalogiga yoki GitHub'ga yozilmaydi.
+
 ## Xavfsizlik
 
 - Haqiqiy bank ma'lumotlarini repozitoriyga joylamang.

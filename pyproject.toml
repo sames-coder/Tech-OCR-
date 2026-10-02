@@ -37,6 +37,9 @@ ocr = [
   "paddleocr>=3.3,<4",
   "paddlepaddle>=3,<4; platform_machine == 'x86_64'",
 ]
+windows = [
+  "pyinstaller>=6.11,<7",
+]
 
 [project.scripts]
 bankxat = "bankxat.cli:app"
