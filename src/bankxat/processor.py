@@ -35,7 +35,8 @@ def _process_file(
                 extract_archive(path, extracted_root, settings)
                 nested: list[ProcessedDocument] = []
                 for child in sorted(item for item in extracted_root.rglob("*") if item.is_file()):
-                    child_relative = f"{relative_path} > {child.relative_to(extracted_root)}"
+                    nested_path = child.relative_to(extracted_root).as_posix()
+                    child_relative = f"{relative_path} > {nested_path}"
                     nested.extend(
                         _process_file(child, child_relative, settings, depth + 1, assistant)
                     )
@@ -108,7 +109,7 @@ def process_directory(
     documents: list[ProcessedDocument] = []
     assistant = SemanticAssistant(settings.ai)
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
-        relative_path = str(path.relative_to(root))
+        relative_path = path.relative_to(root).as_posix()
         documents.extend(_process_file(path, relative_path, settings, depth=0, assistant=assistant))
     merge_results(settings.app.output_dir, documents)
     stats = {
